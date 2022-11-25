@@ -1,15 +1,10 @@
-# some_file.py
-import sys
 import psycopg2
-
+import sys
+sys.path.insert(1, '/Users/apple/PycharmProjects/etlproject/')
 import config
-# caution: path[0] is reserved for script path (or '' in REPL)
-sys.path.insert(1, '/Users/apple/PycharmProjects/etlproject')
+from load import createtable
 
 
-
-
-print(config.databaseName)
 # establishing the connection
 class Database:
     """PostgreSQL Database class."""
@@ -23,6 +18,7 @@ class Database:
         self.conn = None
         self.cur = None
 
+
     def connect(self):
         """Connect to a Postgres database."""
         if self.conn is None:
@@ -35,11 +31,15 @@ class Database:
                     database=self.databasename
                 )
                 self.cur = self.conn.cursor()
+
                 try:
-                    commands = createtable.create_table()
-                    # print(commands)
-                    for command in commands:
-                        self.cur.execute(command)
+                    command = createtable.create_foodnutrientsmapping()
+                    print(command)
+                    # for command in commands:
+                    self.cur.execute(command)
+                    self.conn.commit()
+                    self.cur.close()
+                    print("hhhh")
 
                     # close communication with the PostgreSQL database server
                 except Exception as e:
@@ -53,7 +53,7 @@ class Database:
 # Connection established to: (
 #    'PostgreSQL 11.5, compiled by Visual C++ build 1914, 64-bit',
 # )
-#
+
 
     def insert_rows(self, query):
         self.cur = self.conn.cursor()
