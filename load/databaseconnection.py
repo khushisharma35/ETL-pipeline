@@ -32,14 +32,19 @@ class Database:
                 )
                 self.cur = self.conn.cursor()
 
+
                 try:
-                    command = createtable.create_foodnutrientsmapping()
-                    print(command)
-                    # for command in commands:
-                    self.cur.execute(command)
+                    # command = createtable.create_food_item()
+                    # command1 =createtable.create_nutrients()
+                    # command2 = createtable.create_food_nutrients_mapping()
+                    command3 = createtable.create_recipe()
+                    # self.cur.execute(command)
+                    # self.cur.execute(command1)
+                    # self.cur.execute(command2)
+                    self.cur.execute(command3)
                     self.conn.commit()
                     self.cur.close()
-                    print("hhhh")
+
 
                     # close communication with the PostgreSQL database server
                 except Exception as e:

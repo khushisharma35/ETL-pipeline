@@ -4,40 +4,22 @@ sys.path.insert(1, '/Users/apple/PycharmProjects/etlproject')
 import requests
 import json
 import config
+from transform .data_preprocessing import food_data
 
-fooditem=input("enter")
-
-# def fetch_fooditem(fooditem):
-#     nutrients=['Protein']
-#     if data['currentPage'] is not None:
-#         food=data['foods']
-#         # print(food)
-#         # pprint(food['foodNutrients'])
-#         x = [x for x in food['foodNutrients'][0] if x['nutrientName'] in nutrients]
-#         # print(x)
-
-
-
-
-
-
-#
-# fooditem=input("enter")
-
-response_API = requests.get("https://api.nal.usda.gov/fdc/v1/foods/search?api_key=" + config.key + "&query=")
-print(response_API.status_code)
-data = response_API.text
-data = json.loads(data)
-print(data)
-# fetch_fooditem()
-
-# def fetch_foodnutrients(fooditem):
+def get_input(fooditem):
+    try:
+        response_API = requests.get("https://api.nal.usda.gov/fdc/v1/foods/search?api_key=" + config.key + "&query="+ fooditem)
+        print(response_API.status_code)
+        data = response_API.text
+        data = json.loads(data)
+        # print(data)
+        if data['totalHits'] == 0:
+            raise Exception
+        food_data(data,fooditem)
+    except Exception as e :
+        print(e)
 
 
 
-
-
-
-# fetch_fooditem(fooditem)
 if __name__ == '__main__':
     print('hi')

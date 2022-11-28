@@ -1,19 +1,26 @@
-# def create_food_item():
-#     sql= """ create table food_item( name varchar(100),
-#               id int primary key,
-#               description varchar(100),
-#               category varchar(100));"""
-#     return sql
+def create_food_item():
+    sql= """create table food_item(id SERIAL primary key,
+                                    fdcId int,
+                                    Name varchar(50),
+                                    Description varchar(100),
+                                    Category varchar(100));"""
+    return sql
 def create_nutrients():
-    sql= """create table nutrients(id int primary key,
-                                    nutrientname varchar(50));"""
+    sql= """create table nutrients(id SERIAL ,
+                                    nutrientId int primary key,
+                                    Name varchar(50));"""
     return sql
 
-def create_foodnutrientsmapping():
-    sql=""" create table food_nutrient_mapping(id SERIAL primary key,
+def create_food_nutrients_mapping():
+    sql=""" create table food_nutrients_mapping(id SERIAL primary key,
                         foodId int,
-                        nutrient_id int,
+                        nutrientId int,
                         values float,
                         foreign key(foodId) references food_item(id),
-                        foreign key(nutrient_id) references nutrients(id));"""
+                        foreign key(nutrientId) references nutrients(nutrientId));"""
+    return sql
+def create_recipe():
+    sql = """create table recipe(id SERIAL primary key,
+                  foodName varchar(50),
+                  Recipe varchar(100));"""
     return sql

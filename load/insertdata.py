@@ -1,27 +1,45 @@
 import sys
 sys.path.insert(1, '/Users/apple/PycharmProjects/etlproject/')
-from extraction .api_connection import data,fooditem
 from load import databaseconnection
-from transform .data_preprocessing import required_nutrientsid
-from transform import data_preprocessing
-from transform .data_preprocessing import nutrientsidname
 
-def insert_food(fooditem,id,description,category):
-    sql= f"""insert into food_item values('{fooditem}',{id},'{description}','{category}')"""
-    print("h")
+from transform import nutrients
+
+def insert_food(fdcId,Name,description,Category):
+    sql= f"""insert into food_item(fdcId,Name,Description,Category) values({fdcId},'{Name}','{description}','{Category}')"""
+
     db_obj = databaseconnection.Database()
     db_obj.connect()
     db_obj.insert_rows(sql)
     return sql
-# def insert_nutrients(id,name):
-#     for nutrientsidname in required_nutrientsid:
-#
-#     sql = f"""insert into nutrients values({id},'{name}')"""
-#     print("haaa")
-#     db_obj = databaseconnection.Database()
-#     db_obj.connect()
-#     db_obj.insert_rows(sql)
-#     return sql
-# def insert_food_nutrients_mapping():
-#     sql=""" insert into food_nutrients_mapping values"""
+def insert_nutrients(nutrientId,nutrientName):
+    sql = f"""insert into nutrients(nutrientId,Name) values({nutrientId},'{nutrientName}')"""
+    db_obj = databaseconnection.Database()
+    db_obj.connect()
+    db_obj.insert_rows(sql)
+    return sql
+def insert_food_nutrients_mapping(nutrientId,value):
+    foodid=get_food_id()[0]
+    sql=f""" insert into food_nutrients_mapping(foodId,nutrientId,values)values({foodid},{nutrientId},{value})"""
+    db_obj = databaseconnection.Database()
+    db_obj.connect()
+    db_obj.insert_rows(sql)
+    return sql
+def insert_recipe(fooditem,foodrecipe):
 
+    sql= f"""insert into recipe(foodname,recipe)values('{fooditem}','{foodrecipe}')"""
+    db_obj = databaseconnection.Database()
+    db_obj.connect()
+    db_obj.insert_rows(sql)
+    return sql
+
+
+def get_food_id():
+    sql = f"""SELECT MAX(id) FROM food_item;"""
+    db_obj = databaseconnection.Database()
+    db_obj.connect()
+    cur = db_obj.conn.cursor()
+    cur.execute(sql)
+    foodId = cur.fetchone()
+    cur.close()
+    db_obj.conn.commit()
+    return foodId
